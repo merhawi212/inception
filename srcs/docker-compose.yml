@@ -1,0 +1,98 @@
+version: '3'
+
+services:
+# nginx requirements
+  nginx:
+    build: requirements/nginx/
+    image: nginx
+    container_name: nginx
+    volumes:
+      - ./data/wordpress:/var/www/html
+    ports:
+      - "443:443"
+    networks:
+      - backend
+    depends_on:
+      - wordpress
+    restart: on-failure
+    env_file:
+      - ./.env
+
+  #wordpress requirements
+  wordpress:
+    build: requirements/wordpress/
+    image: wordpress
+    container_name: wordpress
+    #mapp port to access from outside, just for testing
+    # ports: 
+    #   - "9000:9000" 
+    expose:
+      - 9000
+    volumes:
+      - ./data/wordpress:/var/www/html
+    depends_on:
+      - mariadb
+    networks:
+      # - frontend
+      - backend
+    restart: on-failure
+    env_file:
+      - ./.env
+    environment:
+      MYSQL_HOST:       ${MYSQL_HOST}
+      WP_DB_NAME:       ${WP_DB_NAME}
+      WP_DB_USR:        ${WP_DB_USR}
+      WP_DB_PWD:        ${WP_DB_PWD}
+      DOMAIN_NAME:      ${DOMAIN_NAME}
+      WP_TITLE:         ${WP_TITLE}
+      WP_ADMIN_USR:     ${WP_ADMIN_USR}
+      WP_ADMIN_PWD:     ${WP_ADMIN_PWD}
+      WP_ADMIN_EMAIL:   ${WP_ADMIN_EMAIL}
+      WP_USR:           ${WP_USR}
+      WP_PWD:           ${WP_PWD}
+      WP_EMAIL:         ${WP_EMAIL}
+      
+# MariaDB setup
+  mariadb:
+    build: requirements/mariadb/
+    image: mariadb
+    container_name: mariadb
+    expose:
+      - 3306
+    volumes:
+      - ./data/mariadb:/var/lib/mysql
+    networks:
+      - backend
+    restart: on-failure
+    env_file:
+      - ./.env
+    environment:
+      MYSQL_ROOT_PWD:   ${MYSQL_ROOT_PWD}
+      WP_DB_NAME: ${WP_DB_NAME}
+      WP_DB_USR:  ${WP_DB_USR}
+      WP_DB_PWD:  ${WP_DB_PWD}
+
+#docker networks
+networks:
+  # frontend:
+  backend:
+
+# Docker volumes to be shared between services
+volumes:
+  wordpress:
+    name: wordpress
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/wordpress
+      # device: /home/mkiflema/data/wordpress
+
+  mariadb:
+    name: mariadb
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/mariadb
+      # device: /home/mkiflema/data/mariadb
