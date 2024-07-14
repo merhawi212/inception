@@ -7,7 +7,8 @@ services:
     image: nginx
     container_name: nginx
     volumes:
-      - ./data/wordpress:/var/www/html
+       - ./static:/var/www/html
+      # - ./data/wordpress:/var/www/html/wordpress
     ports:
       - "443:443"
     networks:
@@ -29,7 +30,8 @@ services:
     expose:
       - 9000
     volumes:
-      - ./data/wordpress:/var/www/html
+      - ./static:/var/www/html
+      # - ./data/wordpress:/var/www/html/wordpress
     depends_on:
       - mariadb
     networks:
@@ -39,7 +41,7 @@ services:
     env_file:
       - ./.env
     environment:
-      MYSQL_HOST:       ${MYSQL_HOST}
+      MYSQL_WP_HOST:    ${MYSQL_WP_HOST}
       WP_DB_NAME:       ${WP_DB_NAME}
       WP_DB_USR:        ${WP_DB_USR}
       WP_DB_PWD:        ${WP_DB_PWD}
@@ -67,6 +69,7 @@ services:
     env_file:
       - ./.env
     environment:
+      MYSQL_HOST: localhost
       MYSQL_ROOT_PWD:   ${MYSQL_ROOT_PWD}
       WP_DB_NAME: ${WP_DB_NAME}
       WP_DB_USR:  ${WP_DB_USR}

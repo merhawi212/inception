@@ -24,7 +24,10 @@ ENV PATH="/usr/bin:${PATH}"
 RUN ln -s /usr/bin/php81 /usr/bin/php
 # Set the working directory
 WORKDIR /var/www/html/wordpress
-
+# Create the 'nginx' user and group
+RUN addgroup nginx && \
+    adduser -D -S -G nginx nginx
+	
 COPY ./tools/wp_entrypoint.sh /tmp/wp_entrypoint.sh
 
 RUN chmod 755 /tmp/wp_entrypoint.sh

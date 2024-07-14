@@ -1,4 +1,5 @@
 up:
+	- docker rmi -f $$(docker images -f dangling=true -q);
 	docker compose -f ./srcs/docker-compose.yml up --build
 
 nginx:

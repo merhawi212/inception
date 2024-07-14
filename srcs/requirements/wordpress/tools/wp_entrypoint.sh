@@ -38,7 +38,7 @@ if [ ! -f $WP_CONFIG_FILE ]; then
 			--dbname=$WP_DB_NAME \
 			--dbuser=$WP_DB_USR \
 			--dbpass=$WP_DB_PWD \
-			--dbhost=$MYSQL_HOST \
+			--dbhost=$MYSQL_WP_HOST \
 			--dbcharset="utf8" \
 			--allow-root
 	if [ $? -ne 0 ]; then

@@ -23,7 +23,7 @@ ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PWD';
 -- set new password to the newly created user
 -- Grant privilate to the new database
 CREATE DATABASE IF NOT EXISTS $WP_DB_NAME;
-CREATE USER '$WP_DB_USR'@'%' IDENTIFIED BY '$WP_DB_PWD';
+CREATE USER IF NOT EXISTS '$WP_DB_USR'@'%' IDENTIFIED BY '$WP_DB_PWD';
 GRANT ALL PRIVILEGES ON $WP_DB_NAME.* TO '$WP_DB_USR'@'%';
 
 FLUSH PRIVILEGES;
