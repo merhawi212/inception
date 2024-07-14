@@ -1,4 +1,2 @@
-.env
-srcs/.env
 srcs/static
 srcs/data
