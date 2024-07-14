@@ -1,25 +1,7 @@
 #!/bin/sh
 
-# wait for mysql
-# while ! mariadb -h$MYSQL_DB_HOST -u$WP_DB_USR -p$WP_DB_PWD $WP_DB_NAME >/dev/null; do
-#     sleep 3
-# done
-
-
-
-# if [ ! -f "/var/www/html/index.html" ]; then
-
-#     # static website
-#     # mv /tmp/index.html /var/www/html/index.html
-
-# fi
 # Check PHP version (optional)
 php81 -v
-# Infinite loop to keep the container running
-
-# while true; do
-#     sleep 10
-# done
 
 WP_CONFIG_FILE=wp-config.php
 
@@ -38,7 +20,7 @@ if [ ! -f $WP_CONFIG_FILE ]; then
 			--dbname=$WP_DB_NAME \
 			--dbuser=$WP_DB_USR \
 			--dbpass=$WP_DB_PWD \
-			--dbhost=$MYSQL_WP_HOST \
+			--dbhost=$MYSQL_HOST \
 			--dbcharset="utf8" \
 			--allow-root
 	if [ $? -ne 0 ]; then
@@ -68,11 +50,22 @@ if [ ! -f $WP_CONFIG_FILE ]; then
         echo "WordPress is already installed"
     fi
 
-	# create user
-    wp user create $WP_USR $WP_EMAIL \
-		--role=author \
-		--user_pass=$WP_PWD \
-		--allow-root
+	# Check if user exists before creating
+    if ! $(wp user list --allow-root --field=user_login | grep  "^$WP_USR$"); then
+        wp user create $WP_USR $WP_EMAIL \
+            --role=author \
+            --user_pass=$WP_PWD \
+            --allow-root
+
+        if [ $? -ne 0 ]; then
+            echo "Error: Unable to create WordPress user $WP_USR!!!!"
+            exit 1
+        fi
+
+        echo "WordPress user $WP_USR created successfully"
+    else
+        echo "WordPress user $WP_USR already exists"
+    fi
 
     wp theme install inspiro --activate --allow-root
 

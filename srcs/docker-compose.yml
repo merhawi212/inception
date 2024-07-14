@@ -7,8 +7,7 @@ services:
     image: nginx
     container_name: nginx
     volumes:
-       - ./static:/var/www/html
-      # - ./data/wordpress:/var/www/html/wordpress
+      - ./data/wordpress:/var/www/html/wordpress
     ports:
       - "443:443"
     networks:
@@ -16,8 +15,7 @@ services:
     depends_on:
       - wordpress
     restart: on-failure
-    env_file:
-      - ./.env
+    env_file: ./.env
 
   #wordpress requirements
   wordpress:
@@ -30,18 +28,16 @@ services:
     expose:
       - 9000
     volumes:
-      - ./static:/var/www/html
-      # - ./data/wordpress:/var/www/html/wordpress
+      - wordpress:/var/www/html/wordpress
     depends_on:
       - mariadb
     networks:
-      # - frontend
+      - frontend
       - backend
     restart: on-failure
-    env_file:
-      - ./.env
+    env_file: ./.env
     environment:
-      MYSQL_WP_HOST:    ${MYSQL_WP_HOST}
+      MYSQL_HOST:    ${MYSQL_HOST}
       WP_DB_NAME:       ${WP_DB_NAME}
       WP_DB_USR:        ${WP_DB_USR}
       WP_DB_PWD:        ${WP_DB_PWD}
@@ -62,14 +58,12 @@ services:
     expose:
       - 3306
     volumes:
-      - ./data/mariadb:/var/lib/mysql
+      - mariadb:/var/lib/mysql
     networks:
       - backend
     restart: on-failure
-    env_file:
-      - ./.env
+    env_file: ./.env
     environment:
-      MYSQL_HOST: localhost
       MYSQL_ROOT_PWD:   ${MYSQL_ROOT_PWD}
       WP_DB_NAME: ${WP_DB_NAME}
       WP_DB_USR:  ${WP_DB_USR}
@@ -77,7 +71,7 @@ services:
 
 #docker networks
 networks:
-  # frontend:
+  frontend:
   backend:
 
 # Docker volumes to be shared between services
@@ -88,8 +82,8 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ./data/wordpress
-      # device: /home/mkiflema/data/wordpress
+      # device: ./data/wordpress
+      device: /home/${USER}/data/wp
 
   mariadb:
     name: mariadb
@@ -97,5 +91,5 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ./data/mariadb
-      # device: /home/mkiflema/data/mariadb
+      # device: ./data/mariadb
+      device: /home/${USER}/data/db

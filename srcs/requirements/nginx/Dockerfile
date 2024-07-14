@@ -18,12 +18,9 @@ RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
 
 # copy the script to the docker image
 COPY conf/nginx.conf /etc/nginx/nginx.conf
-COPY ./tools/nginx_entrypoint.sh /tmp/nginx_entrypoint.sh
+
 
 LABEL maintainer="Merhawi, mkiflema" \
       version="1.0.0"
 #run the script
-# ENTRYPOINT ["sh", "/tmp/nginx_entrypoint.sh"]
-# Start nginx
-# CMD ["nginx", "-g", "daemon off;", "-c", "/etc/nginx/nginx.conf"]
 CMD ["nginx", "-g", "daemon off;"]

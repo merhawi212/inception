@@ -21,7 +21,7 @@ INIT_DB_SQL=/tmp/initdb.sql
 envsubst < $INIT_DB_SQL > $TMP_SQL_SCRIPT_FILE
 
 # Boot using the SQL commands to initialize the database
-/usr/bin/mysqld --user=mysql --bootstrap < $TMP_SQL_SCRIPT_FILE
+mysqld --user=mysql --bootstrap < $TMP_SQL_SCRIPT_FILE
 
 rm -f $TMP_SQL_SCRIPT_FILE
 

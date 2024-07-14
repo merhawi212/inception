@@ -30,6 +30,8 @@ RUN addgroup nginx && \
 	
 COPY ./tools/wp_entrypoint.sh /tmp/wp_entrypoint.sh
 
+COPY ./conf/www.conf /etc/php81/php-fpm.d/
+
 RUN chmod 755 /tmp/wp_entrypoint.sh
 
 
