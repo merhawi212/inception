@@ -75,6 +75,7 @@ else
     echo "wp-config.php file already exists"
 fi
 
+chown -R nginx:nginx /var/www/html/wordpress
 chmod -R 755 /var/www/html/wordpress
 
 echo "Wordpress started on :9000"

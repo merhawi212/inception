@@ -1,9 +1,9 @@
-LOCAL_DATA_VOLUME = ./srcs/data
+
 up:
-# bash ./srcs/requirements/tools/init_vp.sh
-	mkdir -p /home/${USER}/data/db
-	mkdir -p /home/${USER}/data/wp
-	docker compose -f ./srcs/docker-compose.yml up --build
+
+	@mkdir -p /home/${USER}/data/db
+	@mkdir -p /home/${USER}/data/wp
+	docker compose -f ./srcs/docker-compose.yml up --build -d
 
 nginx:
 	docker exec -it nginx sh
@@ -28,7 +28,6 @@ re: down up
 restart: stop start
 
 clean:
-	rm -rf $(LOCAL_DATA_VOLUME)
 	docker stop $$(docker ps -qa);				\
 	docker rm $$(docker ps -qa);				\
 	docker rmi -f $$(docker images -qa);		\
@@ -36,6 +35,10 @@ clean:
 	docker network rm $$(docker network ls -q);	\
 	docker system prune -af						\
 
-rebuild: clean up
+rm-lv:
+	@sudo rm -rf /home/${USER}/data
 
-.PHONY: all re down clean
+rm-volume:
+	@docker volume rm $$(docker volume ls -q)
+
+rebuild: clean up
