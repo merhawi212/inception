@@ -22,7 +22,7 @@ services:
     build: requirements/wordpress/
     image: wordpress
     container_name: wordpress
-    #mapp port to access from outside, just for testing
+
     expose:
       - 9000
     volumes:
