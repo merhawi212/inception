@@ -46,6 +46,7 @@ You must create Dockerfiles for each service and build the Docker images locally
 
 By completing this project, you will develop a strong foundational understanding of Docker and containerization, while setting up a functional, secure web infrastructure.
 
+
 ## Usage
 
 ### Prerequisites
@@ -53,8 +54,9 @@ By completing this project, you will develop a strong foundational understanding
 - **Docker Desktop**
 - **Docker Compose** (For Docker V2, installing Docker Compose separately is not needed)
 - **Virtual Machine** (Optional, not needed for local testing)
-
-### Running the Services
+## Setup
+```git clone https://github.com/merhawi212/inception.git && cd inception```
+### Running the Service
 
 #### Locally Testing
 
