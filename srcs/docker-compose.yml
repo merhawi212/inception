@@ -1,13 +1,13 @@
 version: '3'
 
 services:
-# nginx requirements
+
   nginx:
     build: requirements/nginx/
     image: nginx
     container_name: nginx
     volumes:
-      - wordpress:/var/www/html/wordpress
+      - ./data/wordpress:/var/www/html/wordpress
     ports:
       - "443:443"
     networks:
@@ -17,7 +17,7 @@ services:
     restart: on-failure
     env_file: ./.env
 
-  #wordpress requirements
+  
   wordpress:
     build: requirements/wordpress/
     image: wordpress
@@ -26,7 +26,7 @@ services:
     expose:
       - 9000
     volumes:
-      - wordpress:/var/www/html/wordpress
+      - ./data/wordpress:/var/www/html/wordpress
     depends_on:
       - mariadb
     networks:
@@ -48,7 +48,7 @@ services:
       WP_PWD:           ${WP_PWD}
       WP_EMAIL:         ${WP_EMAIL}
       
-# MariaDB setup
+
   mariadb:
     build: requirements/mariadb/
     image: mariadb
@@ -56,7 +56,7 @@ services:
     expose:
       - 3306
     volumes:
-      - mariadb:/var/lib/mysql
+      - ./data/mariadb:/var/lib/mysql
     networks:
       - backend
     restart: on-failure
@@ -73,19 +73,19 @@ networks:
   backend:
 
 # Docker volumes to be shared between services
-volumes:
-  wordpress:
-    name: wordpress
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/${USER}/data/wp
+# volumes:
+#   wordpress:
+#     name: wordpress
+#     driver: local
+#     driver_opts:
+#       type: none
+#       o: bind
+#       device: /home/${USER}/data/wp
 
-  mariadb:
-    name: mariadb
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/${USER}/data/db
+#   mariadb:
+#     name: mariadb
+#     driver: local
+#     driver_opts:
+#       type: none
+#       o: bind
+#       device: /home/${USER}/data/db

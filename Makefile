@@ -1,10 +1,10 @@
 
 up:
 
-	@mkdir -p /home/${USER}/data/db
-	@mkdir -p /home/${USER}/data/wp
-	docker compose -f ./srcs/docker-compose.yml up --build -d
-
+# @mkdir -p /home/${USER}/data/db
+# @mkdir -p /home/${USER}/data/wp
+	docker compose -f ./srcs/docker-compose.yml up --build
+	
 nginx:
 	docker exec -it nginx sh
 
